@@ -5,8 +5,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import getModels from './models';
 
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
+import indexRouter from './routes';
 
 var app = express();
 
@@ -17,10 +16,13 @@ getModels().then((models) => {
   }
   // Sync Database
   models.sequelize.sync().then(() => {
+
+    
     console.log('Nice! Database looks fine');
     // uncomment after placing your favicon in /public
     //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     app.use(bodyParser.json());
+    app.set('view engine', 'html');
     app.use(bodyParser.urlencoded({
       extended: false
     }));
