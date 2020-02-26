@@ -24,8 +24,28 @@ router.get('/users', async (req, res) => {
   });
 });
 
-router.get('/user', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
+  let { id } = req.params;
 
+  if (id) {
+    const responsePromise = getModels().then(async (models) => {
+      return await models.address.findAll({
+        where: {
+          userId: id
+        },
+        raw: true
+      });
+    });
+    responsePromise.then(data => {
+      res.json(data);
+    }).catch(e => {
+      console.log(e);
+      res.status(500)
+      res.render('error', { error: e })
+    });
+  } else {
+    res.render('error', { error: "User Id not present" })
+  }
 });
 
 export default router;
